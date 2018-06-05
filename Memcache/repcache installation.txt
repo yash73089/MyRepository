@@ -1,0 +1,104 @@
+Server 1 (10.20.65.3)
+
+Memcached Version 1.2.8, Repcached 2.2
+# wget http://blackbird.si/wp-content/uploads/2014/02/memcached-1.2.8-repcached-2.2-1.el6_.x86_64.rpm 
+# yum install perl-IO-Socket-INET6 libevent
+# rpm -ivh memcached-1.2.8-repcached-2.2-1.el6_.x86_64.rpm
+
+# vi /etc/sysconfig/memcached
+
+PORT="11211"
+USER="memcached"
+MAXCONN="65000"
+CACHESIZE="800"
+BACKLOGQUEUELIMIT="1024"
+BINDINGPROTOCOL="auto"
+CHUNKSIZE="64"
+CHUNKSIZEGROWTHFACTOR="1.25"
+REQUESTPEREVENT="20"
+ERRORONMEMORYEXHAUSTED="-M"
+MAXITEMSIZE="1048576"
+MAXCONNSFAST="maxconns_fast=yes"
+SLABAUTOMOVE="slab_automove=0"
+HASHPOWER="hashpower=16"
+MAXCOREFILELIMIT="maximize_core_file_limit"
+THREADS="1"
+OPTIONS="-vv >> /var/log/memcached 2>&1 -x 10.20.65.5"
+
+# vi /etc/init.d/memcached
+
+#PORT=11211
+#USER=memcached
+#MAXCONN=1024
+#CACHESIZE=64
+#OPTIONS=""
+
+daemon --pidfile ${pidfile} memcached -d -p $PORT -u $USER  -m $CACHESIZE -c $MAXCONN -n $CHUNKSIZE -b $BACKLOGQUEUELIMIT -B $BINDINGPROTOCOL -f $CHUNKSIZEGROWTHFACTOR -R $REQUESTPEREVENT $LOCKDOWNPAGEDMEM $ERRORONMEMORYEXHAUSTED -I $MAXITEMSIZE -o $MAXCONNSFAST -o $SLABAUTOMOVE -o $HASHPOWER -t $THREADS -P /var/run/memcached/memcached.pid $OPTIONS
+
+# /etc/init.d/memcached start
+
+
+Server 2 (10.20.65.5)
+
+Memcached Version 1.2.8, Repcached 2.2
+# wget http://blackbird.si/wp-content/uploads/2014/02/memcached-1.2.8-repcached-2.2-1.el6_.x86_64.rpm 
+# yum install perl-IO-Socket-INET6 libevent
+# rpm -ivh memcached-1.2.8-repcached-2.2-1.el6_.x86_64.rpm
+
+# vi /etc/sysconfig/memcached
+
+PORT="11211"
+USER="memcached"
+MAXCONN="65000"
+CACHESIZE="800"
+BACKLOGQUEUELIMIT="1024"
+BINDINGPROTOCOL="auto"
+CHUNKSIZE="64"
+CHUNKSIZEGROWTHFACTOR="1.25"
+REQUESTPEREVENT="20"
+ERRORONMEMORYEXHAUSTED="-M"
+MAXITEMSIZE="1048576"
+MAXCONNSFAST="maxconns_fast=yes"
+SLABAUTOMOVE="slab_automove=0"
+HASHPOWER="hashpower=16"
+MAXCOREFILELIMIT="maximize_core_file_limit"
+THREADS="1"
+OPTIONS="-vv >> /var/log/memcached 2>&1 -x 10.20.65.3"
+
+# vi /etc/init.d/memcached
+
+#PORT=11211
+#USER=memcached
+#MAXCONN=1024
+#CACHESIZE=64
+#OPTIONS=""
+
+daemon --pidfile ${pidfile} memcached -d -p $PORT -u $USER  -m $CACHESIZE -c $MAXCONN -n $CHUNKSIZE -b $BACKLOGQUEUELIMIT -B $BINDINGPROTOCOL -f $CHUNKSIZEGROWTHFACTOR -R $REQUESTPEREVENT $LOCKDOWNPAGEDMEM $ERRORONMEMORYEXHAUSTED -I $MAXITEMSIZE -o $MAXCONNSFAST -o $SLABAUTOMOVE -o $HASHPOWER -t $THREADS -P /var/run/memcached/memcached.pid $OPTIONS
+
+# /etc/init.d/memcached start
+
+
+Replication Testing
+
+Server 1 (10.20.65.3)
+# telnet 127.0.0.1 11211                                   
+Trying 127.0.0.1...
+Connected to 127.0.0.1.
+Escape character is '^]'.
+set test 0 0 4
+test
+STORED
+
+Server2 (10.20.65.5)
+# telnet localhost 11211
+Trying ::1...
+Connected to localhost.
+Escape character is '^]'.
+get test
+VALUE test 0 4
+test
+END
+
+
+
+

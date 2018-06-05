@@ -1,0 +1,19 @@
+mcrouter installation
+
+
+# mkdir /usr/local/mcrouter-install
+
+
+Note: user and group game need to be uncommented to install gnome
+# vi /etc/passwd
+# vi /etc/group
+
+# apt-get install -y gcc-4.8 g++-4.8 libboost1.54-dev libboost-thread1.54-dev libboost-filesystem1.54-dev libboost-system1.54-dev libboost-regex1.54-dev libboost-python1.54-dev libboost-context1.54-dev ragel autoconf unzip git libtool python-dev cmake libssl-dev libcap-dev libevent-dev libgtest-dev libsnappy-dev scons binutils-dev make wget libdouble-conversion-dev libgflags-dev libgoogle-glog-dev gnome pkg-config
+#tar -xvzf /home/mcrouter.tar.gz -C /usr/local/
+# cd /usr/local/mcrouter/mcrouter/scripts/
+# ./install_ubuntu_14.04.sh /usr/local/mcrouter-install/ -j4
+#  /usr/local/mcrouter-install/install/bin/mcrouter --help
+# vim ~/.bashrc
+alias mcrouter='/usr/local/mcrouter-install/install/bin/mcrouter'
+# source ~/.bashrc
+# mkdir /var/spool/mcrouter

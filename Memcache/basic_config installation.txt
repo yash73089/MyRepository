@@ -1,0 +1,96 @@
+# wget ftp://rpmfind.net/linux/remi/enterprise/6/remi/x86_64/memcached-1.4.30-1.el6.remi.x86_64.rpm
+# yum install libevent
+# yum install memcached-1.4.30-1.el6.remi.x86_64.rpm
+# service memcached start
+# vi /etc/sysconfig/memcached
+
+PORT="11211"
+USER="memcached"
+MAXCONN="65000"
+CACHESIZE="800"
+BACKLOGQUEUELIMIT="1024"
+BINDINGPROTOCOL="auto"
+CHUNKSIZE="64"
+CHUNKSIZEGROWTHFACTOR="1.25"
+REQUESTPEREVENT="20"
+ERRORONMEMORYEXHAUSTED="-M"
+MAXITEMSIZE="1048576"
+MAXCONNSFAST="maxconns_fast=yes"
+SLABAUTOMOVE="slab_automove=0"
+HASHPOWER="hashpower=16"
+MAXCOREFILELIMIT="maximize_core_file_limit"
+THREADS="1"
+OPTIONS="-vv >> /var/log/memcached 2>&1"
+
+
+# vi /etc/init.d/memcached
+
+#PORT=11211
+#USER=memcached
+#MAXCONN=1024
+#CACHESIZE=64
+#OPTIONS=""
+
+daemon --pidfile ${pidfile} memcached -d -p $PORT -u $USER  -m $CACHESIZE -c $MAXCONN -n $CHUNKSIZE -b $BACKLOGQUEUELIMIT -B $BINDINGPROTOCOL -f $CHUNKSIZEGROWTHFACTOR -R $REQUESTPEREVENT $LOCKDOWNPAGEDMEM $ERRORONMEMORYEXHAUSTED -I $MAXITEMSIZE -o $MAXCONNSFAST -o $SLABAUTOMOVE -o $HASHPOWER -t $THREADS -P ${pidfile} $OPTIONS
+
+# service memcached restart
+
+
+# echo "stats settings" | nc localhost 11211
+
+STAT maxbytes 838860800
+STAT maxconns 65000
+STAT tcpport 11211
+STAT udpport 11211
+STAT inter NULL
+STAT verbosity 2
+STAT oldest 0
+STAT evictions off
+STAT domain_socket NULL
+STAT umask 700
+STAT growth_factor 1.25
+STAT chunk_size 64
+STAT num_threads 1
+STAT num_threads_per_udp 1
+STAT stat_key_prefix :
+STAT detail_enabled no
+STAT reqs_per_event 20
+STAT cas_enabled yes
+STAT tcp_backlog 1024
+STAT binding_protocol auto-negotiate
+STAT auth_enabled_sasl no
+STAT item_size_max 1048576
+STAT maxconns_fast yes
+STAT hashpower_init 16
+STAT slab_reassign no
+STAT slab_automove 0
+STAT slab_chunk_max 1048576
+STAT lru_crawler no
+STAT lru_crawler_sleep 100
+STAT lru_crawler_tocrawl 0
+STAT tail_repair_time 0
+STAT flush_enabled yes
+STAT hash_algorithm jenkins
+STAT lru_maintainer_thread no
+STAT hot_lru_pct 32
+STAT warm_lru_pct 32
+STAT expirezero_does_not_evict no
+STAT idle_timeout 0
+STAT watcher_logbuf_size 262144
+STAT worker_logbuf_size 65536
+STAT track_sizes no
+END
+
+
+## TCP/IP Fine Tuning. Already part of OS template
+
+# To increase TCP max buffer size
+net.core.rmem_max = 33554432
+net.core.wmem_max = 33554432
+
+# To increase Linux auto tuning TCP buffer limits min, default, and max number of bytes to use.
+net.ipv4.tcp_rmem = 4096 87380 33554432
+net.ipv4.tcp_wmem = 4096 65536 33554432
+
+
+

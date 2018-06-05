@@ -1,0 +1,4 @@
+{"comps":{"comp":
+[{"private_ip":"10.20.16.20","cloud_app_component_id":"4291716","host_name":"MithRedis2","type":"mcrouter_master"},{"private_ip":"10.20.16.21","cloud_app_component_id":"4291717","host_name":"MithRedis1","type":"mcrouter_slave"}]}}
+
+SELECT b.Age, a.emp_id, a.emp_name FROM Employee a, Profile b WHERE a.emp_name = b.emp_name;
