@@ -1,4 +1,3 @@
-##Class definition
 class company:
     def __init__(self,name,location,type):
         self.Company_Name = name
