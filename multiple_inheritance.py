@@ -18,4 +18,5 @@ class developer(Employee, company):
 
 
 dev1 = developer('phonix', 'UK', 'ram', 'p101', 'php')
+print(dev1)
 print(dev1.Employee_Name)
